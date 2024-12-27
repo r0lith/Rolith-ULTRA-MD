@@ -1,14 +1,18 @@
 import fetch from 'node-fetch'
+import https from 'https'
 
-const handler = async (m, { conn, command, text, args, usedPrefix }) => {
-  if (!text) throw `give a text to search Example: *${usedPrefix + command}* ULTRA MD`
+const agent = new https.Agent({
+  rejectUnauthorized: false
+})
+
+const handler = async (m, { conn }) => {
   conn.mywebsite = conn.mywebsite ? conn.mywebsite : {}
   await conn.reply(m.chat, 'Please wait...', m)
 
   try {
-    // Fetch HTML from the specified website
+    // Fetch HTML from the specified website with SSL verification disabled
     const url = `https://comfortcorner.unaux.com/submissions/`
-    const response = await fetch(url)
+    const response = await fetch(url, { agent })
     if (!response.ok) throw new Error('Failed to fetch the website content')
     const html = await response.text()
 
