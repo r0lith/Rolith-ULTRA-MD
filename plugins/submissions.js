@@ -1,20 +1,17 @@
-import fetch from 'node-fetch'
-import https from 'https'
+const fetch = require('node-fetch');
 
-const agent = new https.Agent({
-  rejectUnauthorized: false
-})
-
-const handler = async (m, { conn }) => {
+const handler = async (m, { conn, command, text, args, usedPrefix }) => {
+  if (!text) throw `give a text to search Example: *${usedPrefix + command}* ULTRA MD`
   conn.mywebsite = conn.mywebsite ? conn.mywebsite : {}
   await conn.reply(m.chat, 'Please wait...', m)
 
   try {
-    // Fetch HTML from the specified website with SSL verification disabled
+    // Fetch HTML from the specified website
     const url = `https://comfortcorner.unaux.com/submissions/`
-    const response = await fetch(url, { agent })
+    const response = await fetch(url)
     if (!response.ok) throw new Error('Failed to fetch the website content')
     const html = await response.text()
+    console.log(html) // Log the fetched HTML content
 
     // Simple HTML parsing without cheerio
     const results = []
@@ -22,14 +19,16 @@ const handler = async (m, { conn }) => {
     let match
     while ((match = regex.exec(html)) !== null) {
       const trHtml = match[1]
-      const subjectMatch = /<div class="field-your-subject">([\s\S]*?)<\/div>/.exec(trHtml)
-      const messageMatch = /<div class="field-your-message">([\s\S]*?)<\/div>/.exec(trHtml)
+      const subjectMatch = /<td class="field-your-subject">([\s\S]*?)<\/td>/.exec(trHtml)
+      const messageMatch = /<td class="field-your-message">([\s\S]*?)<\/td>/.exec(trHtml)
       if (subjectMatch && messageMatch) {
         const subject = subjectMatch[1].trim()
         const message = messageMatch[1].trim()
         results.push({ subject, message })
       }
     }
+
+    console.log(results) // Log the parsed results
 
     // Limit to the first 10 results
     const limitedResults = results.slice(0, 10)
@@ -42,6 +41,7 @@ const handler = async (m, { conn }) => {
     })
 
     const orderedLinksText = orderedLinks.join('\n\n')
+    console.log(orderedLinksText) // Log the ordered links text
     const fullText = `${infoText}\n\n${orderedLinksText}`
     const { key } = await conn.reply(m.chat, fullText, m)
     conn.mywebsite[m.sender] = {
