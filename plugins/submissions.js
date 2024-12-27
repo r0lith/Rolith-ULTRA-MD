@@ -1,9 +1,3 @@
-// Command metadata
-// Description: Fetch and parse submissions from a website
-// Usage: !submissions
-// Author: Your Name
-// Date: YYYY-MM-DD
-
 import fetch from 'node-fetch';
 import https from 'https';
 
@@ -22,10 +16,13 @@ const handler = async (m, { conn }) => {
 
     // Check if the response is HTML with a JavaScript challenge
     if (text.includes('<html>') && text.includes('<script>')) {
+      console.log('JavaScript challenge detected, attempting redirect handling...');
       // Extract the redirect URL from the JavaScript challenge
       const redirectUrlMatch = text.match(/location\.href="([^"]+)"/);
       if (redirectUrlMatch) {
         const redirectUrl = redirectUrlMatch[1];
+        console.log('Redirecting to:', redirectUrl);
+        // Follow the redirect to fetch the correct data
         response = await fetch(redirectUrl, { agent });
         text = await response.text();
       }
