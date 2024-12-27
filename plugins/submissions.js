@@ -15,6 +15,7 @@ const handler = async (m, { conn }) => {
     const response = await fetch(url, { agent })
     if (!response.ok) throw new Error('Failed to fetch the website content')
     const html = await response.text()
+    console.log(html) // Log the fetched HTML content
 
     // Simple HTML parsing without cheerio
     const results = []
