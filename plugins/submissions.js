@@ -17,8 +17,25 @@ const handler = async (m, { conn }) => {
   try {
     // Fetch the data from the WordPress REST endpoint
     const url = 'https://comfortcorner.unaux.com/wp-json/cf7-views/v1/get-data';
-    const response = await fetch(url, { agent });
-    const json = await response.json();
+    const response = await fetch(url, {
+      agent,
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+    const text = await response.text();
+
+    console.log('Fetched Response Text:', text); // Debug: Log the fetched response text
+
+    // Attempt to parse the response as JSON
+    let json;
+    try {
+      json = JSON.parse(text);
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      await conn.reply(m.chat, 'An error occurred while parsing the response.', m);
+      return;
+    }
 
     console.log('Fetched JSON:', json); // Debug: Log the fetched JSON
 
