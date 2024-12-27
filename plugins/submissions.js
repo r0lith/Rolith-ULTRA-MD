@@ -18,15 +18,21 @@ const handler = async (m, { conn }) => {
     // Fetch the data from the WordPress REST endpoint
     const url = 'https://comfortcorner.unaux.com/wp-json/cf7-views/v1/get-data';
     const response = await fetch(url, { agent });
-    if (!response.ok) throw new Error('Failed to fetch the website content');
-    const data = await response.json();
+    const json = await response.json();
 
-    console.log('Fetched Data:', data); // Debug: Log the fetched data
+    console.log('Fetched JSON:', json); // Debug: Log the fetched JSON
 
-    // Parse the data to extract desired elements
-    const results = data.map(item => ({
-      subject: item.subject.trim(),
-      message: item.message.trim(),
+    // Check if the response is successful
+    if (!json.success) {
+      await conn.reply(m.chat, 'Failed to fetch submissions.', m);
+      return;
+    }
+
+    // Parse the JSON to extract desired elements
+    const results = json.data.map(item => ({
+      id: item.id,
+      subject: item.content[0].trim(), // Extracting the subject
+      message: item.content[1].trim(), // Extracting the message
     }));
 
     console.log('Parsed Results:', results); // Debug: Log parsed results
@@ -43,7 +49,7 @@ const handler = async (m, { conn }) => {
     // Prepare the message with the parsed data
     const infoText = `✦ ──『 *WEBSITE SUBMISSIONS* 』── ✦\n\n[ ⭐ Reply with the number of the desired submission to get more details]. \n\n`;
     const orderedLinks = limitedResults
-      .map((item, index) => `*${index + 1}.* ${item.subject}`)
+      .map((item, index) => `*${index + 1}.* ${item.subject}`) // Listing the subjects
       .join('\n\n');
     const fullText = `${infoText}\n\n${orderedLinks}`;
 
