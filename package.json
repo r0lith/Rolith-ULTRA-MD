@@ -41,7 +41,6 @@
     },
     "license": "Apache License 2.0",
     "dependencies": {
-        "puppeteer": "^19.0.0",
         "fluent-ffmpeg": "^2.1.2",
         "ffmpeg": "^0.0.4",
         "formdata-node": "^5.0.0",
