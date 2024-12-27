@@ -1,34 +1,31 @@
-import fetch from 'node-fetch';
-import https from 'https';
+// Command metadata
+// Description: Fetch and parse submissions from a website
+// Usage: !submissions
+// Author: Your Name
+// Date: YYYY-MM-DD
 
-// Create an HTTPS agent to bypass SSL verification
-const agent = new https.Agent({ rejectUnauthorized: false });
+import puppeteer from 'puppeteer';
 
 const handler = async (m, { conn }) => {
   conn.mywebsite = conn.mywebsite ? conn.mywebsite : {};
   await conn.reply(m.chat, 'Please wait...', m);
 
   try {
-    // Fetch the data from the WordPress REST endpoint
-    const url = 'https://comfortcorner.unaux.com/wp-json/cf7-views/v1/get-data';
-    let response = await fetch(url, { agent });
-    let text = await response.text();
+    // Launch a headless browser
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
 
-    // Check if the response is HTML with a JavaScript challenge
-    if (text.includes('<html>') && text.includes('<script>')) {
-      console.log('JavaScript challenge detected, attempting redirect handling...');
-      // Extract the redirect URL from the JavaScript challenge
-      const redirectUrlMatch = text.match(/location\.href="([^"]+)"/);
-      if (redirectUrlMatch) {
-        const redirectUrl = redirectUrlMatch[1];
-        console.log('Redirecting to:', redirectUrl);
-        // Follow the redirect to fetch the correct data
-        response = await fetch(redirectUrl, { agent });
-        text = await response.text();
-      }
-    }
+    // Navigate to the URL and wait for the JavaScript challenge to complete
+    const url = 'https://comfortcorner.unaux.com/wp-json/cf7-views/v1/get-data';
+    await page.goto(url, { waitUntil: 'networkidle2' });
+
+    // Get the page content after the JavaScript challenge
+    const text = await page.evaluate(() => document.body.innerText);
 
     console.log('Fetched Response Text:', text); // Debug: Log the fetched response text
+
+    // Close the browser
+    await browser.close();
 
     // Attempt to parse the response as JSON
     let json;
