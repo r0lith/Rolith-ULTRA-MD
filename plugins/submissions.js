@@ -1,3 +1,9 @@
+// Command metadata
+// Description: Fetch and parse submissions from a website
+// Usage: !submissions
+// Author: Your Name
+// Date: YYYY-MM-DD
+
 import fetch from 'node-fetch';
 import https from 'https';
 
@@ -9,34 +15,19 @@ const handler = async (m, { conn }) => {
   await conn.reply(m.chat, 'Please wait...', m);
 
   try {
-    // Fetch the HTML content of the submissions page
-    const url = 'https://comfortcorner.unaux.com/submissions/';
+    // Fetch the data from the WordPress REST endpoint
+    const url = 'https://comfortcorner.unaux.com/wp-json/cf7-views/v1/get-data';
     const response = await fetch(url, { agent });
     if (!response.ok) throw new Error('Failed to fetch the website content');
-    const html = await response.text();
+    const data = await response.json();
 
-    console.log(html); // Debug: Log the fetched HTML
+    console.log('Fetched Data:', data); // Debug: Log the fetched data
 
-    // Parse the HTML to extract data
-    const results = [];
-    const regex = /<tr>([\s\S]*?)<\/tr>/g;
-    let match;
-    while ((match = regex.exec(html)) !== null) {
-      const trHtml = match[1];
-      const subjectMatch = /<td class="field-your-subject">([\s\S]*?)<\/td>/i.exec(trHtml);
-      const messageMatch = /<td class="field-your-message">([\s\S]*?)<\/td>/i.exec(trHtml);
-
-      console.log('trHtml:', trHtml); // Debug: Log each <tr>
-      console.log('subjectMatch:', subjectMatch); // Debug: Log matched subject
-      console.log('messageMatch:', messageMatch); // Debug: Log matched message
-
-      if (subjectMatch && messageMatch) {
-        results.push({
-          subject: subjectMatch[1].trim(),
-          message: messageMatch[1].trim(),
-        });
-      }
-    }
+    // Parse the data to extract desired elements
+    const results = data.map(item => ({
+      subject: item.subject.trim(),
+      message: item.message.trim(),
+    }));
 
     console.log('Parsed Results:', results); // Debug: Log parsed results
 
@@ -63,37 +54,10 @@ const handler = async (m, { conn }) => {
     conn.mywebsite[m.sender] = {
       results: limitedResults,
       key,
-      timeout: setTimeout(() => {
-        conn.sendMessage(m.chat, { delete: key });
-        delete conn.mywebsite[m.sender];
-      }, 150 * 1000),
     };
   } catch (error) {
-    await conn.reply(m.chat, `Error: ${error.message}`, m);
-  }
-};
-
-// This function handles the user's reply to the bot message
-handler.before = async (m, { conn }) => {
-  conn.mywebsite = conn.mywebsite ? conn.mywebsite : {};
-  if (m.isBaileys || !(m.sender in conn.mywebsite)) return;
-
-  const { results, key, timeout } = conn.mywebsite[m.sender];
-  if (!m.quoted || m.quoted.id !== key.id || !m.text) return;
-
-  const choice = m.text.trim();
-  const inputNumber = Number(choice);
-  if (inputNumber >= 1 && inputNumber <= results.length) {
-    const selectedItem = results[inputNumber - 1];
-    console.log('Selected Item:', selectedItem); // Debug: Log the selected item
-
-    // Send the details of the selected item
-    const detailsText = `*Subject:* ${selectedItem.subject}\n*Message:* ${selectedItem.message}`;
-    await conn.reply(m.chat, detailsText, m);
-  } else {
-    m.reply(
-      `Invalid sequence number. Please select a number from the list above (1 to ${results.length}).`
-    );
+    console.error('Error:', error);
+    await conn.reply(m.chat, 'An error occurred while fetching submissions.', m);
   }
 };
 
