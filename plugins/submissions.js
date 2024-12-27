@@ -4,28 +4,28 @@
 // Author: Your Name
 // Date: YYYY-MM-DD
 
-import fetch from 'node-fetch';
-import https from 'https';
-
-// Create an HTTPS agent to bypass SSL verification
-const agent = new https.Agent({ rejectUnauthorized: false });
+import puppeteer from 'puppeteer';
 
 const handler = async (m, { conn }) => {
   conn.mywebsite = conn.mywebsite ? conn.mywebsite : {};
   await conn.reply(m.chat, 'Please wait...', m);
 
   try {
-    // Fetch the data from the WordPress REST endpoint
+    // Launch a headless browser
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    // Navigate to the URL and wait for the JavaScript challenge to complete
     const url = 'https://comfortcorner.unaux.com/wp-json/cf7-views/v1/get-data';
-    const response = await fetch(url, {
-      agent,
-      headers: {
-        'Accept': 'application/json',
-      },
-    });
-    const text = await response.text();
+    await page.goto(url, { waitUntil: 'networkidle2' });
+
+    // Get the page content after the JavaScript challenge
+    const text = await page.evaluate(() => document.body.innerText);
 
     console.log('Fetched Response Text:', text); // Debug: Log the fetched response text
+
+    // Close the browser
+    await browser.close();
 
     // Attempt to parse the response as JSON
     let json;
