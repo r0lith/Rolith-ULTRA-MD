@@ -1,50 +1,40 @@
-import fetch from 'node-fetch'
+async function loadTabletop() {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'
+    script.onload = resolve
+    script.onerror = reject
+    document.head.appendChild(script)
+  })
+}
 
-async function handler(m, { conn, text }) {
-  try {
-    // Fetch data from the public Google Sheet
-    const spreadsheetId = '1NJfDC9dywSGcaebNPMaL7CrbrgNy-VgnQU61xOSBI_w'
-    const range = 'Sheet1!A2:B' // Adjust the range as needed
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}`
-    const response = await fetch(url)
-    if (!response.ok) throw new Error('Failed to fetch the Google Sheet content')
-    const data = await response.json()
-    const rows = data.values
-    if (!rows.length) {
-      console.log('No data found.')
-      return
-    }
-
-    const results = rows.map(row => ({
-      subject: row[0],
-      message: row[1],
-    }))
-
-    console.log(results) // Log the parsed results
-
-    // Limit to the first 10 results
-    const limitedResults = results.slice(0, 10)
-
-    const infoText = `✦ ──『 *WEBSITE SUBMISSIONS* 』── ✦\n\n [ ⭐ Reply the number of the desired submission to get more details]. \n\n`
-    const orderedLinks = limitedResults.map((item, index) => {
-      const sectionNumber = index + 1
-      const { subject } = item
-      return `*${sectionNumber}.* ${subject}`
+async function fetchGoogleSheetData() {
+  await loadTabletop()
+  return new Promise((resolve, reject) => {
+    Tabletop.init({
+      key: 'https://docs.google.com/spreadsheets/d/1NJfDC9dywSGcaebNPMaL7CrbrgNy-VgnQU61xOSBI_w/pubhtml',
+      callback: (data, tabletop) => {
+        resolve(data)
+      },
+      simpleSheet: true,
+      error: (error) => {
+        reject(error)
+      }
     })
+  })
+}
 
-    const orderedLinksText = orderedLinks.join('\n\n')
-    console.log(orderedLinksText) // Log the ordered links text
-    const fullText = `${infoText}\n\n${orderedLinksText}`
-    const { key } = await conn.reply(m.chat, fullText, m)
-    conn.mywebsite = conn.mywebsite || {}
-    conn.mywebsite[m.sender] = {
-      results: limitedResults,
-      key,
-    }
-
-    // Handle user input for selecting a submission
-    const inputNumber = parseInt(text.trim())
-    if (inputNumber > 0 && inputNumber <= results.length) {
+handler.before = async (m, { conn }) => {
+  try {
+    const data = await fetchGoogleSheetData()
+    conn.mywebsite = conn.mywebsite ? conn.mywebsite : {}
+    if (m.isBaileys || !(m.sender in conn.mywebsite)) return
+    const { results, key, timeout } = conn.mywebsite[m.sender]
+    console.log(conn.mywebsite)
+    if (!m.quoted || m.quoted.id !== key.id || !m.text) return
+    const choice = m.text.trim()
+    const inputNumber = Number(choice)
+    if (inputNumber >= 1 && inputNumber <= results.length) {
       const selectedItem = results[inputNumber - 1]
       console.log('selectedItem', selectedItem)
 
@@ -58,7 +48,7 @@ async function handler(m, { conn, text }) {
       )
     }
   } catch (error) {
-    console.error(error)
+    await conn.reply(m.chat, `Error: ${error.message}`, m)
   }
 }
 
