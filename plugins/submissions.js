@@ -36,6 +36,7 @@ async function handler(m, { conn, text }) {
     console.log(orderedLinksText) // Log the ordered links text
     const fullText = `${infoText}\n\n${orderedLinksText}`
     const { key } = await conn.reply(m.chat, fullText, m)
+    conn.mywebsite = conn.mywebsite || {}
     conn.mywebsite[m.sender] = {
       results: limitedResults,
       key,
