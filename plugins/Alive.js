@@ -16,23 +16,32 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     },
   };
 
-  let messageContent = {
-    text: '𝗨𝗟𝗧𝗥𝗔-𝗠𝗗 𝗜𝗦 𝗥𝗨𝗡𝗡𝗜𝗡𝗚', // Text content in case a message body is needed
+  let buttons = [
+    { buttonId: `${usedPrefix}menu`, buttonText: { displayText: 'Menu' }, type: 1 },
+    { buttonId: `${usedPrefix}donate`, buttonText: { displayText: 'Donate' }, type: 1 },
+    { buttonId: `${usedPrefix}info`, buttonText: { displayText: 'Info' }, type: 1 }
+  ];
+
+  let buttonMessage = {
+    text: 'Riruru Initializing', // Text content in case a message body is needed
+    footer: 'Rolith',
+    buttons: buttons,
+    headerType: 1,
     contextInfo: {
       mentionedJid: [m.sender],
       externalAdReply: {
-        title: '© 𝙶𝚕𝚘𝚋𝚊𝚕𝚃𝚎𝚌𝚑𝙸𝚗𝚏𝚘',
-        body: '© GlobalTechInfo',
+        title: 'Rolith',
+        body: 'Rolith',
         thumbnailUrl: img,
-        sourceUrl: 'https://whatsapp.com/channel/0029VagJIAr3bbVBCpEkAM07',
+        sourceUrl: 'https://wa.me/+919737825303',
         mediaType: 1,
         renderLargerThumbnail: true,
       },
     },
   };
 
-  // Send the message with the external ad reply
-  await conn.sendMessage(m.chat, messageContent, { quoted: con });
+  // Send the message with the buttons
+  await conn.sendMessage(m.chat, buttonMessage, { quoted: con });
 };
 
 handler.help = ['alive'];
