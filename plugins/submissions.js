@@ -22,8 +22,8 @@ const handler = async (m, { conn }) => {
     let match
     while ((match = regex.exec(html)) !== null) {
       const trHtml = match[1]
-      const subjectMatch = /<td class="field-your-subject">([\s\S]*?)<\/td>/.exec(trHtml)
-      const messageMatch = /<td class="field-your-message">([\s\S]*?)<\/td>/.exec(trHtml)
+      const subjectMatch = /<div class="field-your-subject">([\s\S]*?)<\/div>/.exec(trHtml)
+      const messageMatch = /<div class="field-your-message">([\s\S]*?)<\/div>/.exec(trHtml)
       if (subjectMatch && messageMatch) {
         const subject = subjectMatch[1].trim()
         const message = messageMatch[1].trim()
