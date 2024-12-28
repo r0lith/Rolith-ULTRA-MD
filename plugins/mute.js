@@ -1,38 +1,36 @@
 let mutedUsers = {};
 
-let muteHandler = async (m, { conn, args }) => {
-  if (!m.quoted) throw `✳️ Please reply to a message to mute the user.`;
-
-  let duration = args[0];
-  if (!duration) throw `✳️ Please specify the duration, e.g., !mute 10m`;
-
-  let time = parseDuration(duration);
-  if (!time) throw `✳️ Invalid duration format. Use s, m, or h for seconds, minutes, or hours respectively.`;
+let handler = async (m, { conn, args, command }) => {
+  if (!m.quoted) throw `✳️ Please reply to a message to ${command} the user.`;
 
   let user = m.quoted.sender;
-  mutedUsers[user] = Date.now() + time;
 
-  conn.sendMessage(m.chat, { text: `🔇 User has been muted for ${duration}.` });
+  if (command === 'mute') {
+    let duration = args[0];
+    if (!duration) throw `✳️ Please specify the duration, e.g., !mute 10m`;
 
-  setTimeout(() => {
-    delete mutedUsers[user];
-    conn.sendMessage(m.chat, { text: `🔊 User has been unmuted.` });
-  }, time);
-};
+    let time = parseDuration(duration);
+    if (!time) throw `✳️ Invalid duration format. Use s, m, or h for seconds, minutes, or hours respectively.`;
 
-let unmuteHandler = async (m, { conn }) => {
-  if (!m.quoted) throw `✳️ Please reply to a message to unmute the user.`;
+    mutedUsers[user] = Date.now() + time;
 
-  let user = m.quoted.sender;
-  if (mutedUsers[user]) {
-    delete mutedUsers[user];
-    conn.sendMessage(m.chat, { text: `🔊 User has been unmuted.` });
-  } else {
-    conn.sendMessage(m.chat, { text: `✳️ User is not muted.` });
+    conn.sendMessage(m.chat, { text: `🔇 User has been muted for ${duration}.` });
+
+    setTimeout(() => {
+      delete mutedUsers[user];
+      conn.sendMessage(m.chat, { text: `🔊 User has been unmuted.` });
+    }, time);
+  } else if (command === 'unmute') {
+    if (mutedUsers[user]) {
+      delete mutedUsers[user];
+      conn.sendMessage(m.chat, { text: `🔊 User has been unmuted.` });
+    } else {
+      conn.sendMessage(m.chat, { text: `✳️ User is not muted.` });
+    }
   }
 };
 
-muteHandler.before = async (m, { conn }) => {
+handler.before = async (m, { conn }) => {
   let user = m.sender;
   if (mutedUsers[user] && Date.now() < mutedUsers[user]) {
     await conn.sendMessage(m.chat, { delete: m.key });
@@ -41,21 +39,14 @@ muteHandler.before = async (m, { conn }) => {
   return false;
 };
 
-muteHandler.help = ['mute <duration>'];
-muteHandler.tags = ['group'];
-muteHandler.command = /^mute$/i;
-muteHandler.group = true;
-muteHandler.admin = true;
-muteHandler.botAdmin = true;
+handler.help = ['mute <duration>', 'unmute'];
+handler.tags = ['group'];
+handler.command = /^(mute|unmute)$/i;
+handler.group = true;
+handler.admin = true;
+handler.botAdmin = true;
 
-unmuteHandler.help = ['unmute'];
-unmuteHandler.tags = ['group'];
-unmuteHandler.command = /^unmute$/i;
-unmuteHandler.group = true;
-unmuteHandler.admin = true;
-unmuteHandler.botAdmin = true;
-
-export default { muteHandler, unmuteHandler };
+export default handler;
 
 function parseDuration(duration) {
   let match = duration.match(/^(\d+)(s|m|h)$/);
