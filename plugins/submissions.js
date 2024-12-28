@@ -6,8 +6,25 @@
 
 import puppeteer from 'puppeteer';
 
-const handler = async (m, { conn }) => {
+const handler = async (m, { conn, text }) => {
   conn.mywebsite = conn.mywebsite ? conn.mywebsite : {};
+
+  if (conn.mywebsite[m.sender] && conn.mywebsite[m.sender].awaitingReply) {
+    const selectedNumber = parseInt(text, 10);
+    const limitedResults = conn.mywebsite[m.sender].results;
+
+    if (selectedNumber >= 1 && selectedNumber <= 5) {
+      const selectedContent = limitedResults[selectedNumber - 1].content[1];
+      await conn.reply(m.chat, selectedContent, m);
+    } else {
+      await conn.reply(m.chat, 'Please reply with a number between 1 and 5.', m);
+    }
+
+    // Clear the state after handling the reply
+    delete conn.mywebsite[m.sender].awaitingReply;
+    return;
+  }
+
   await conn.reply(m.chat, 'Please wait...', m);
 
   try {
@@ -60,29 +77,11 @@ const handler = async (m, { conn }) => {
     console.log('Final Message:', fullText); // Debug: Log the final message
 
     // Send the message and store data for further interaction
-    const { key } = await conn.reply(m.chat, fullText, m);
+    await conn.reply(m.chat, fullText, m);
     conn.mywebsite[m.sender] = {
       results: limitedResults,
-      key,
+      awaitingReply: true,
     };
-
-    // Add a listener for the user's reply
-    conn.on('chat-update', async (chatUpdate) => {
-      if (!chatUpdate.hasNewMessage) return;
-      const message = chatUpdate.messages.all()[0];
-      if (!message.message) return;
-      if (message.key.remoteJid !== m.chat) return;
-
-      const userReply = message.message.conversation;
-      const selectedNumber = parseInt(userReply, 10);
-
-      if (selectedNumber >= 1 && selectedNumber <= 5) {
-        const selectedContent = limitedResults[selectedNumber - 1].content[1];
-        await conn.reply(m.chat, selectedContent, m);
-      } else {
-        await conn.reply(m.chat, 'Please reply with a number between 1 and 5.', m);
-      }
-    });
   } catch (error) {
     console.error('Error:', error);
     await conn.reply(m.chat, 'An error occurred while fetching submissions.', m);
