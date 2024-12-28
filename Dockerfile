@@ -6,7 +6,19 @@ RUN apt-get update && \
   ffmpeg \
   imagemagick \
   webp \
-  libnss3 && \
+  libnss3 \
+  libatk1.0-0 \
+  libatk-bridge2.0-0 \
+  libcups2 \
+  libxcomposite1 \
+  libxrandr2 \
+  libxdamage1 \
+  libpango1.0-0 \
+  libasound2 \
+  libxtst6 \
+  libxshmfence1 \
+  libnss3-dev \
+  libgbm-dev && \
   apt-get upgrade -y && \
   rm -rf /var/lib/apt/lists/*
 
@@ -14,6 +26,7 @@ RUN apt-get update && \
 COPY package.json .
 
 RUN npm install && npm install qrcode-terminal
+
 
 # Copy the rest of the application code
 COPY . .
