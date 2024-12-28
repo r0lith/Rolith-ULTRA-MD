@@ -11,8 +11,10 @@ const handler = async (m, { conn }) => {
   await conn.reply(m.chat, 'Please wait...', m);
 
   try {
-    // Launch a headless browser
-    const browser = await puppeteer.launch();
+    // Launch a headless browser with necessary flags
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const page = await browser.newPage();
 
     // Navigate to the URL and wait for the JavaScript challenge to complete
@@ -46,38 +48,7 @@ const handler = async (m, { conn }) => {
     }
 
     // Parse the JSON to extract desired elements
-    const results = json.data.map(item => ({
-      id: item.id,
-      subject: item.content[0].trim(), // Extracting the subject
-      message: item.content[1].trim(), // Extracting the message
-    }));
-
-    console.log('Parsed Results:', results); // Debug: Log parsed results
-
-    // Check if no results were parsed
-    if (results.length === 0) {
-      await conn.reply(m.chat, 'No submissions found.', m);
-      return;
-    }
-
-    // Limit the results to the first 5 entries
-    const limitedResults = results.slice(0, 5);
-
-    // Prepare the message with the parsed data
-    const infoText = `✦ ──『 *WEBSITE SUBMISSIONS* 』── ✦\n\n[ ⭐ Reply with the number of the desired submission to get more details]. \n\n`;
-    const orderedLinks = limitedResults
-      .map((item, index) => `*${index + 1}.* ${item.subject}`) // Listing the subjects
-      .join('\n\n');
-    const fullText = `${infoText}\n\n${orderedLinks}`;
-
-    console.log('Final Message:', fullText); // Debug: Log the final message
-
-    // Send the message and store data for further interaction
-    const { key } = await conn.reply(m.chat, fullText, m);
-    conn.mywebsite[m.sender] = {
-      results: limitedResults,
-      key,
-    };
+    // ...existing code...
   } catch (error) {
     console.error('Error:', error);
     await conn.reply(m.chat, 'An error occurred while fetching submissions.', m);
