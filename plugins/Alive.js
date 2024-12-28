@@ -16,6 +16,13 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     },
   };
 
+  const buttons = [
+    { type: "url", displayText: "💃🏻 Official Website", url: 'https://amdaniwasa.com/' },
+    { type: "url", displayText: "🎞️ AN Tech YouTube Channel", url: 'https://www.youtube.com/channel/UCZx8U1EU95-Wn9mH4dn15vQ' },
+    { type: "click", displayText: "System Stats", buttonCMD: `${usedPrefix}system` },
+    { type: "click", displayText: "Version Check", buttonCMD: `${usedPrefix}qaversion` }
+  ];
+
   let messageContent = {
     text: 'Riruru Initializing', // Text content in case a message body is needed
     contextInfo: {
@@ -29,10 +36,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         renderLargerThumbnail: true,
       },
     },
-    buttons: [
-      { buttonId: 'id1', buttonText: { displayText: 'Button 1' }, type: 1 },
-      { buttonId: 'id2', buttonText: { displayText: 'Button 2' }, type: 1 },
-    ],
+    buttons: buttons,
     headerType: 1, // 1 for text message
   };
 
