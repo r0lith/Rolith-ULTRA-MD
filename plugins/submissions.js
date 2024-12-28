@@ -39,9 +39,9 @@ const handler = async (m, { conn, text }) => {
     await page.goto(url, { waitUntil: 'networkidle2' });
 
     // Get the page content after the JavaScript challenge
-    const text = await page.evaluate(() => document.body.innerText);
+    const pageContent = await page.evaluate(() => document.body.innerText);
 
-    console.log('Fetched Response Text:', text); // Debug: Log the fetched response text
+    console.log('Fetched Response Text:', pageContent); // Debug: Log the fetched response text
 
     // Close the browser
     await browser.close();
@@ -49,7 +49,7 @@ const handler = async (m, { conn, text }) => {
     // Attempt to parse the response as JSON
     let json;
     try {
-      json = JSON.parse(text);
+      json = JSON.parse(pageContent);
     } catch (error) {
       console.error('Error parsing JSON:', error);
       await conn.reply(m.chat, 'An error occurred while parsing the response.', m);
