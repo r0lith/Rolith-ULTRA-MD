@@ -71,6 +71,24 @@ const handler = async (m, { conn }) => {
   }
 };
 
+// Listener for user's reply
+const replyHandler = async (m, { conn }) => {
+  const userSession = conn.mywebsite[m.sender];
+  if (!userSession) return;
+
+  const selectedNumber = parseInt(m.text.trim());
+  if (isNaN(selectedNumber) || selectedNumber < 1 || selectedNumber > userSession.results.length) {
+    await conn.reply(m.chat, 'Invalid selection. Please reply with a valid number.', m);
+    return;
+  }
+
+  const selectedSubmission = userSession.results[selectedNumber - 1];
+  const contentText = selectedSubmission.content.join('\n\n');
+
+  await conn.reply(m.chat, `Here is the content for submission ${selectedNumber}:\n\n${contentText}`, m);
+  delete conn.mywebsite[m.sender]; // Clear the session after replying
+};
+
 // Command metadata
 handler.help = ['submissions'];
 handler.tags = ['tools'];
@@ -79,3 +97,12 @@ handler.admin = false;
 handler.group = false;
 
 export default handler;
+
+// Register the reply handler
+conn.on('chat-update', async (chat) => {
+  if (!chat.hasNewMessage) return;
+  const m = chat.messages.all()[0];
+  if (!m.message) return;
+
+  await replyHandler(m, { conn });
+});
