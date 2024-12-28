@@ -15,7 +15,7 @@ const handler = async (m, { conn, text }) => {
 
     if (selectedNumber >= 1 && selectedNumber <= 5) {
       const selectedItem = limitedResults[selectedNumber - 1];
-      const selectedContent = `*${selectedItem.content[0]}*\n\n${selectedItem.content[1]}`;
+      const selectedContent = `*Anonymous Message #${selectedNumber}*\n\n*Subject:* *${selectedItem.content[0]}*\n\n${selectedItem.content[1]}\n-------------------------\nHave something to say but you can't open up? Share yourself at *The Comfort Corner* Anonymously: https://comfortcorner.unaux.com/`;
       await conn.reply(m.chat, selectedContent, m);
     } else {
       await conn.reply(m.chat, 'Please reply with a number between 1 and 5.', m);
