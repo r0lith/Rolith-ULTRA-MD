@@ -16,17 +16,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     },
   };
 
-  let buttons = [
-    { buttonId: `${usedPrefix}menu`, buttonText: { displayText: 'Menu' }, type: 1 },
-    { buttonId: `${usedPrefix}donate`, buttonText: { displayText: 'Donate' }, type: 1 },
-    { buttonId: `${usedPrefix}info`, buttonText: { displayText: 'Info' }, type: 1 }
-  ];
-
-  let buttonMessage = {
+  let messageContent = {
     text: 'Riruru Initializing', // Text content in case a message body is needed
-    footer: 'Rolith',
-    buttons: buttons,
-    headerType: 1,
     contextInfo: {
       mentionedJid: [m.sender],
       externalAdReply: {
@@ -38,10 +29,15 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         renderLargerThumbnail: true,
       },
     },
+    buttons: [
+      { buttonId: 'id1', buttonText: { displayText: 'Button 1' }, type: 1 },
+      { buttonId: 'id2', buttonText: { displayText: 'Button 2' }, type: 1 },
+    ],
+    headerType: 1, // 1 for text message
   };
 
-  // Send the message with the buttons
-  await conn.sendMessage(m.chat, buttonMessage, { quoted: con });
+  // Send the message with the external ad reply and buttons
+  await conn.sendMessage(m.chat, messageContent, { quoted: con });
 };
 
 handler.help = ['alive'];
