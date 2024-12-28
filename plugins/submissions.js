@@ -14,7 +14,8 @@ const handler = async (m, { conn, text }) => {
     const limitedResults = conn.mywebsite[m.sender].results;
 
     if (selectedNumber >= 1 && selectedNumber <= 5) {
-      const selectedContent = limitedResults[selectedNumber - 1].content[1];
+      const selectedItem = limitedResults[selectedNumber - 1];
+      const selectedContent = `*${selectedItem.content[0]}*\n\n${selectedItem.content[1]}`;
       await conn.reply(m.chat, selectedContent, m);
     } else {
       await conn.reply(m.chat, 'Please reply with a number between 1 and 5.', m);
