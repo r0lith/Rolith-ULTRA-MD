@@ -47,8 +47,24 @@ const handler = async (m, { conn }) => {
       return;
     }
 
-    // Parse the JSON to extract desired elements
-    // ...existing code...
+    // Limit the results to the first 5 entries
+    const limitedResults = json.data.slice(0, 5);
+
+    // Prepare the message with the parsed data
+    const infoText = `✦ ──『 *WEBSITE SUBMISSIONS* 』── ✦\n\n[ ⭐ Reply with the number of the desired submission to get more details]. \n\n`;
+    const orderedLinks = limitedResults
+      .map((item, index) => `*${index + 1}.* ${item.content[0]}`) // Listing the first element of the content array
+      .join('\n\n');
+    const fullText = `${infoText}\n\n${orderedLinks}`;
+
+    console.log('Final Message:', fullText); // Debug: Log the final message
+
+    // Send the message and store data for further interaction
+    const { key } = await conn.reply(m.chat, fullText, m);
+    conn.mywebsite[m.sender] = {
+      results: limitedResults,
+      key,
+    };
   } catch (error) {
     console.error('Error:', error);
     await conn.reply(m.chat, 'An error occurred while fetching submissions.', m);
