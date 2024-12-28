@@ -104,5 +104,9 @@ conn.on('chat-update', async (chat) => {
   const m = chat.messages.all()[0];
   if (!m.message) return;
 
-  await replyHandler(m, { conn });
+  if (m.message.conversation && m.message.conversation.startsWith('!submissions')) {
+    await handler(m, { conn });
+  } else {
+    await replyHandler(m, { conn });
+  }
 });
