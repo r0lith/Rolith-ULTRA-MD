@@ -65,28 +65,28 @@ const handler = async (m, { conn }) => {
       results: limitedResults,
       key,
     };
+
+    // Add a listener for the user's reply
+    conn.on('chat-update', async (chatUpdate) => {
+      if (!chatUpdate.hasNewMessage) return;
+      const message = chatUpdate.messages.all()[0];
+      if (!message.message) return;
+      if (message.key.remoteJid !== m.chat) return;
+
+      const userReply = message.message.conversation;
+      const selectedNumber = parseInt(userReply, 10);
+
+      if (selectedNumber >= 1 && selectedNumber <= 5) {
+        const selectedContent = limitedResults[selectedNumber - 1].content[1];
+        await conn.reply(m.chat, selectedContent, m);
+      } else {
+        await conn.reply(m.chat, 'Please reply with a number between 1 and 5.', m);
+      }
+    });
   } catch (error) {
     console.error('Error:', error);
     await conn.reply(m.chat, 'An error occurred while fetching submissions.', m);
   }
-};
-
-// Listener for user's reply
-const replyHandler = async (m, { conn }) => {
-  const userSession = conn.mywebsite[m.sender];
-  if (!userSession) return;
-
-  const selectedNumber = parseInt(m.text.trim());
-  if (isNaN(selectedNumber) || selectedNumber < 1 || selectedNumber > userSession.results.length) {
-    await conn.reply(m.chat, 'Invalid selection. Please reply with a valid number.', m);
-    return;
-  }
-
-  const selectedSubmission = userSession.results[selectedNumber - 1];
-  const contentText = selectedSubmission.content.join('\n\n');
-
-  await conn.reply(m.chat, `Here is the content for submission ${selectedNumber}:\n\n${contentText}`, m);
-  delete conn.mywebsite[m.sender]; // Clear the session after replying
 };
 
 // Command metadata
@@ -97,16 +97,3 @@ handler.admin = false;
 handler.group = false;
 
 export default handler;
-
-// Register the reply handler
-conn.on('chat-update', async (chat) => {
-  if (!chat.hasNewMessage) return;
-  const m = chat.messages.all()[0];
-  if (!m.message) return;
-
-  if (m.message.conversation && m.message.conversation.startsWith('!submissions')) {
-    await handler(m, { conn });
-  } else {
-    await replyHandler(m, { conn });
-  }
-});
