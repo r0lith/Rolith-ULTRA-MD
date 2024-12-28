@@ -19,30 +19,19 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   const buttons = [
     { buttonId: `${usedPrefix}system`, buttonText: { displayText: 'System Stats' }, type: 1 },
     { buttonId: `${usedPrefix}qaversion`, buttonText: { displayText: 'Version Check' }, type: 1 },
-    { buttonId: 'id3', buttonText: { displayText: 'Official Website' }, type: 1, url: 'https://amdaniwasa.com/' },
-    { buttonId: 'id4', buttonText: { displayText: 'YouTube Channel' }, type: 1, url: 'https://www.youtube.com/channel/UCZx8U1EU95-Wn9mH4dn15vQ' }
+    { buttonId: 'id3', buttonText: { displayText: 'Official Website' }, type: 1 },
+    { buttonId: 'id4', buttonText: { displayText: 'YouTube Channel' }, type: 1 }
   ];
 
-  let messageContent = {
-    text: 'Riruru Initializing', // Text content in case a message body is needed
+  let buttonMessage = {
+    text: 'Riruru Initializing',
     footer: 'Choose an option below:',
     buttons: buttons,
     headerType: 1, // 1 for text message
-    contextInfo: {
-      mentionedJid: [m.sender],
-      externalAdReply: {
-        title: 'Rolith',
-        body: 'Rolith',
-        thumbnailUrl: img,
-        sourceUrl: 'https://wa.me/+919737825303',
-        mediaType: 1,
-        renderLargerThumbnail: true,
-      },
-    },
   };
 
-  // Send the message with the external ad reply and buttons
-  await conn.sendMessage(m.chat, messageContent, { quoted: con });
+  // Send the message with the buttons
+  await conn.sendMessage(m.chat, buttonMessage, { quoted: con });
 };
 
 handler.help = ['alive'];
