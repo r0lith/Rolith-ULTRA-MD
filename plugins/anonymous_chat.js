@@ -1,4 +1,4 @@
-const fs = require('fs'); // Add this line to import the fs module
+import fs from 'fs'; // Use import instead of require
 
 async function handler(m, {usedPrefix, command}) {
   const datas = global
