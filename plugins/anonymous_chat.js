@@ -2,7 +2,7 @@ import fs from 'fs'; // Use import instead of require
 
 async function handler(m, {usedPrefix, command}) {
   const datas = global
-  const idioma = datas.db.data.users[m.sender].language || global.defaultLenguaje
+  const idioma = datas.db.data.users[m.sender].language || global.defaultLenguaje || 'en';
   const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
   const tradutor = _translate.plugins.anonymous_chat
 
