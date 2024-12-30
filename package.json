@@ -66,6 +66,7 @@
         "fluent-ffmpeg": "^2.1.2",
         "ffmpeg": "^0.0.4",
         "formdata-node": "^5.0.0",
+        "fs": "^0.0.1-security",
         "g-i-s": "^2.1.6",
         "google-it": "^1.6.4",
         "got": "^11.8.6",
