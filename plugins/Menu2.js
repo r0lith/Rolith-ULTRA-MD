@@ -86,7 +86,7 @@ let str = `
     
 
 
-  await conn.sendFile(m.chat, pp, 'perfil.jpg', str, m, null, canal)
+ await conn.sendMessage(m.chat, { text: str }, { quoted: m })
     m.react(done)
 
 }
