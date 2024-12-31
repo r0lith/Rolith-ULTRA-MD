@@ -86,7 +86,7 @@ let str = `
     
 
 
-   conn.sendFile(m.chat, pp, 'perfil.jpg', str, m, null, canal)
+   conn.sendFile(m.chat, pp, 'perfil.gif', str, m, null, canal)
     m.react(done)
 
 }
