@@ -11,7 +11,10 @@ const time = moment.tz('Asia/Karachi').format('HH')
 let wib = moment.tz('Asia/Karachi').format('HH:mm:ss')
 //import db from '../lib/database.js'
 
-let handler = async (m, { conn, usedPrefix, command}) => {
+
+let handler = async (m, { conn, usedPrefix, command, isOwner }) => {
+    if (!isOwner) throw `✳️ This command can only be run by the owner.`;
+    
     let d = new Date(new Date + 3600000)
     let locale = 'en'
     let week = d.toLocaleDateString(locale, { weekday: 'long' })
@@ -20,7 +23,7 @@ let handler = async (m, { conn, usedPrefix, command}) => {
     let uptime = clockString(_uptime)
 let who = m.quoted ? m.quoted.sender : m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 if (!(who in global.db.data.users)) throw `✳️ The user is not found in my database`
-let pp = './assets/A.jpg'
+let pp = './assets/Riruru.gif'
 let user = global.db.data.users[who]
 let { name, exp, diamond, lastclaim, registered, regTime, age, level, role, warn } = global.db.data.users[who]
 let { min, xp, max } = xpRange(user.level, global.multiplier)
@@ -37,13 +40,11 @@ let quote = quotes[Math.floor(Math.random() * quotes.length)];
 
 let taguser = '@' + m.sender.split("@s.whatsapp.net")[0]
 let str = `
-🚀 *_Buckle up ${name}, ${greeting}! We're going on an adventure!_* 🚀
+ ${greeting} ${name}
 
-📋 *_Quote of the day: ${quote}_* 📋
-> ➠ *Bot Name* : *ULTRA-MD*
-> ➠ *Version*     : *3 . 1 . 0*
-> ➠ *Type*          : *PLUGINS*
-> ➠ *Platform*   : *LINUX*
+> ➠ *Bot Name*  : *Riruru*
+> ➠ *Version*   : *2.0*
+> ➠ *Owner*     : *Rolith*
 
 ◈┏━⟪ *MENU* ⟫━━⦿
 ◈┃• groupmenu
@@ -60,7 +61,6 @@ let str = `
 ◈┃• economy
 ◈┃• reactions
 ◈┃• funmenu
-◈┃• nsfwmenu
 ◈┃• randompic
 ◈┃• randomvid
 ◈┃• setprivacy
@@ -78,12 +78,9 @@ let str = `
 ◈┃• fancy2
 ◈┗━♪♪━★━☆━⦿
 
-© GlobalTechInfo
 
-> 💡 *_Remember, when in doubt, use ${usedPrefix}listmenu or ${usedPrefix}help It's like my magic spell book!_* 💡
+> 💡 *Built to assist :)* 💡
 `
-
-    
 
        // await conn.sendMessage(m.chat, { video: { url: [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13, pp14, pp15].getRandom() }, gifPlayback: true, caption: text.trim(), mentions: [m.sender] }, { quoted: estilo })
     
@@ -105,8 +102,8 @@ function clockString(ms) {
     return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')}
     
     function ucapan() {
-      const time = moment.tz('Asia/Karachi').format('HH')
-      let res = "happy early in the day☀️"
+      const time = moment.tz('Asia/Kolkata').format('HH')
+      let res = "Happy early in the day☀️"
       if (time >= 4) {
         res = "Good Morning 🌄"
       }
@@ -123,6 +120,7 @@ function clockString(ms) {
     }
     const quotes = [
       "I'm not lazy, I'm just on my energy saving mode.",
+      "KC Chutiya hai.",
       "Life is short, smile while you still have teeth.",
       "I may be a bad influence, but darn I am fun!",
       "I'm on a whiskey diet. I've lost three days already.",
