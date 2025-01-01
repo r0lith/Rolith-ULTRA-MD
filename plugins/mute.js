@@ -5,6 +5,7 @@ let handler = async (m, { conn, args, command }) => {
 
   let user = m.quoted.sender;
 
+  if (isOwner) throw `✳️ He's my owner, you idiot.`;
   if (command === 'mute') {
     let duration = args[0];
     if (!duration) throw `✳️ Please specify the duration, e.g., !mute 10m`;
