@@ -81,7 +81,7 @@ let str = `
 
 
  await conn.sendMessage(m.chat, { text: str }, { quoted: m })
-    m.react(done)
+    m.react('🎉')
 
 }
 handler.help = ['main']
