@@ -19,6 +19,7 @@ let handler = async function (m, { conn, text, usedPrefix }) {
 
   // Send an image file
   await conn.sendFile(m.chat, pp, 'menu.jpg', m2, m);
+   m.react('🎉')
 }
 
 handler.help = ['menu3'];
