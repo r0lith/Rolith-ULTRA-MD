@@ -46,24 +46,15 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   let str = `
 🚀 *_Buckle up ${name}, ${greeting}! We're going on an adventure!_* 🚀
 
-📜 *_Quote of the day: ${quote}_* 📜
+*_Quote of the day: ${quote}_*
 
-┏━💼 _User Info:_ 💼━┓
-┃ 👾  *User:* ${taguser} 
-┃ 🎩  *Name:* ${name} 
-┃ 🦸  *Master:* ${author} 
-┃ 💎  *Diamonds:* ${diamond} 
-┃ 🏆  *Rank:* ${role}
-┃ 🎮  *XP:* ${exp} 
-┗━━━━━━━━━━━┛
-
-┏━━⏰ _Today's Sauce!_ ⏰━┓
+┏━━⏰ Today's Sauce! ⏰━┓
 ┃ 📆  *Date:* ${date} 
 ┃ ⏲️  *Time:* ${wib} 
 ┗━━━━━━━━━━━━━┛
 
-┏━━🤖 _BOT STATUS:_🤖━━┓
-┃ 🤡  *Bot Name:* ${botname} 
+┏━━ ✨BOT STATUS✨ ━━┓
+┃ 🤖  *Bot Name:* ${botname} 
 ┃ 💻  *Platform:* Linux 
 ┃ 📣  *Prefix:* ${usedPrefix} 
 ┃ 🕓  *Uptime:* ${uptime}
@@ -71,11 +62,11 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 ┃ 📚  *Total Users:* ${totaluser} 
 ┗━━━━━━━━━━━━━┛
 
-💡 *_Remember, when in doubt, use ${usedPrefix}listmenu or ${usedPrefix}help It's like my magic spell book!_* 💡
+✨ *Built to Assist* ✨
 `
 
-  conn.sendFile(m.chat, pp, 'perfil.jpg', str, m, null, rpyt)
-  m.react(done)
+  conn.sendFile(m.chat, pp, 'perfil.jpg', str, m, null)
+  m.react('🎉')
 }
 handler.help = ['main']
 handler.tags = ['group']
