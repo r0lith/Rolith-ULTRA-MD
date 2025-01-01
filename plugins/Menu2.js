@@ -42,44 +42,44 @@ let taguser = '@' + m.sender.split("@s.whatsapp.net")[0]
 let str = `
  ${greeting} ${name}
 
-⫷⫸━━━━━━━⟪ 🌟 *Riruru* 🌟 ⟫━━━━━━━⫷⫸  
+⫷⫸━━⟪ 🌟 *Riruru* 🌟 ⟫━━⫷⫸  
      ➠ **Bot Name**  : **Riruru**  
      ➠ **Version**   : **2.0**  
      ➠ **Owner**     : **Rolith**
 
-╭─━─━─━─◇◆◇─━─━─━─╮  
-**✨ MAIN MENU ✨**  
-╰─━─━─━─◇◆◇─━─━─━─╯  
+╭─━─━─◇◆◇─━─━─╮  
+✨ MAIN MENU ✨  
+╰─━─━─◇◆◇─━─━─╯  
 
-➤ **groupmenu**  
-➤ **animemenu**  
-➤ **autoreact**  
-➤ **infoanime**  
-➤ **makermenu**  
-➤ **ownermenu**  
-➤ **stickermenu**  
-➤ **toolsmenu**  
-➤ **gamesmenu**  
-➤ **logomenu**  
-➤ **listplugin**  
-➤ **economy**  
-➤ **reactions**  
-➤ **funmenu**  
-➤ **randompic**  
-➤ **randomvid**  
-➤ **setprivacy**  
-➤ **botmenu**  
-➤ **listmenu**  
-➤ **dlmenu**  
-➤ **enable**  
-➤ **aimenu**  
-➤ **aeditor**  
-➤ **imagen**  
-➤ **menu**  
-➤ **menu3**  
-➤ **menu4**  
-➤ **fancy**  
-➤ **fancy2**  
+➤ *groupmenu*  
+➤ *animemenu*  
+➤ *autoreact*  
+➤ *infoanime*  
+➤ *makermenu* 
+➤ *ownermenu* 
+➤ *stickermenu*  
+➤ *toolsmenu*  
+➤ *gamesmenu*  
+➤ *logomenu* 
+➤ *listplugin*  
+➤ *economy*  
+➤ *reactions*  
+➤ *funmenu*  
+➤ *randompic*  
+➤ *randomvid* 
+➤ *setprivacy*  
+➤ *botmenu*  
+➤ *listmenu*  
+➤ *dlmenu*  
+➤ *enable*  
+➤ *aimenu* 
+➤ *aeditor*  
+➤ *imagen*  
+➤ *menu*  
+➤ *menu3*  
+➤ *menu4*  
+➤ *fancy*  
+➤ *fancy2*  
 
 ✨ *Built to Assist* ✨
 `
