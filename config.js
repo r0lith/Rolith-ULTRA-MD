@@ -13,7 +13,6 @@ const defaultOwner = '923444844060';
 const ownervb = process.env.OWNERS || process.env.OWNER_NUMBER || '919737825303';  // put your number here
 
 const ownerlist = ownervb.split(';');
-const caption = process.env.CAPTION || 'Riruru v2.0';
 global.owner = [];
 for (let i = 0; i < ownerlist.length; i++) {
     global.owner.push([ownerlist[i], true]);
