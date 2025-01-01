@@ -6,6 +6,7 @@ import fs from 'fs'
 const { levelling } = '../lib/levelling.js'
 import moment from 'moment-timezone'
 import { promises } from 'fs'
+import { caption } from './config.js';
 import { join } from 'path'
 const time = moment.tz('Asia/Karachi').format('HH')
 let wib = moment.tz('Asia/Karachi').format('HH:mm:ss')
