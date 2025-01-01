@@ -28,7 +28,7 @@ let handler = async (m, { conn, text }) => {
     
     let userPfp = await conn
       .profilePictureUrl(who, 'image')
-      .catch(_ => 'https://i.ibb.co/9HY4wjz/a4c0b1af253197d4837ff6760d5b81c0.jpg')
+      .catch(_ => null)
     let user = global.db.data.users[who]
     let { name } = global.db.data.users[who]
 
@@ -105,7 +105,7 @@ let handler = async (m, { conn, text }) => {
     // Clean up temporary file
     fs.unlinkSync(tempImagePath)
 
-    m.react('🤡')
+    m.react('🎉')
   } catch (e) {
     console.error(e)
     m.react('😭')
