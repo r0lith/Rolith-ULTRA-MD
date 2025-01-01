@@ -42,44 +42,46 @@ let taguser = '@' + m.sender.split("@s.whatsapp.net")[0]
 let str = `
  ${greeting} ${name}
 
-> ➠ *Bot Name*  : *Riruru*
-> ➠ *Version*   : *2.0*
-> ➠ *Owner*     : *Rolith*
+⫷⫸━━━━━━━⟪ 🌟 *Riruru* 🌟 ⟫━━━━━━━⫷⫸  
+     ➠ **Bot Name**  : **Riruru**  
+     ➠ **Version**   : **2.0**  
+     ➠ **Owner**     : **Rolith**
 
-◈┏━⟪ *MENU* ⟫━━⦿
-◈┃• groupmenu
-◈┃• animemenu
-◈┃• autoreact
-◈┃• infoanime
-◈┃• makermenu
-◈┃• ownermenu
-◈┃• stickermenu
-◈┃• toolsmenu
-◈┃• gamesmenu
-◈┃• logomenu
-◈┃• listplugin
-◈┃• economy
-◈┃• reactions
-◈┃• funmenu
-◈┃• randompic
-◈┃• randomvid
-◈┃• setprivacy
-◈┃• botmenu
-◈┃• listmenu
-◈┃• dlmenu
-◈┃• enable
-◈┃• aimenu
-◈┃• aeditor
-◈┃• imagen
-◈┃• menu
-◈┃• menu3
-◈┃• menu4
-◈┃• fancy
-◈┃• fancy2
-◈┗━♪♪━★━☆━⦿
+╭─━─━─━─◇◆◇─━─━─━─╮  
+**✨ MAIN MENU ✨**  
+╰─━─━─━─◇◆◇─━─━─━─╯  
 
+➤ **groupmenu**  
+➤ **animemenu**  
+➤ **autoreact**  
+➤ **infoanime**  
+➤ **makermenu**  
+➤ **ownermenu**  
+➤ **stickermenu**  
+➤ **toolsmenu**  
+➤ **gamesmenu**  
+➤ **logomenu**  
+➤ **listplugin**  
+➤ **economy**  
+➤ **reactions**  
+➤ **funmenu**  
+➤ **randompic**  
+➤ **randomvid**  
+➤ **setprivacy**  
+➤ **botmenu**  
+➤ **listmenu**  
+➤ **dlmenu**  
+➤ **enable**  
+➤ **aimenu**  
+➤ **aeditor**  
+➤ **imagen**  
+➤ **menu**  
+➤ **menu3**  
+➤ **menu4**  
+➤ **fancy**  
+➤ **fancy2**  
 
-> 💡 *Built to assist :)* 💡
+✨ *Built to Assist* ✨
 `
 
        // await conn.sendMessage(m.chat, { video: { url: [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13, pp14, pp15].getRandom() }, gifPlayback: true, caption: text.trim(), mentions: [m.sender] }, { quoted: estilo })
