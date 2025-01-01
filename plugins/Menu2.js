@@ -82,6 +82,7 @@ let str = `
 ➤ *fancy2*  
 
 ✨ *Built to Assist* ✨
+${caption}
 `
 
        // await conn.sendMessage(m.chat, { video: { url: [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13, pp14, pp15].getRandom() }, gifPlayback: true, caption: text.trim(), mentions: [m.sender] }, { quoted: estilo })
