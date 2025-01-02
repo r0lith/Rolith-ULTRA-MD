@@ -5,6 +5,10 @@ let handler = async (m, { conn, args, command }) => {
 
   let user = m.quoted.sender;
 
+  // Check if the user is the bot owner
+  const botOwner = '9737825303@s.whatsapp.net'; // Replace with the actual bot owner's JID
+  if (user === botOwner) throw `✳️ He's my owner, you idiot.`;
+
   if (command === 'mute') {
     let duration = args[0];
     if (!duration) throw `✳️ Please specify the duration, e.g., !mute 10m`;
