@@ -4,10 +4,13 @@ let handler = async (m, { conn, args, command }) => {
   if (!m.quoted) throw `✳️ Please reply to a message to ${command} the user.`;
 
   let user = m.quoted.sender;
+  let userName = conn.getName(user);
+  let userNumber = user.split('@')[0];
 
-  // Check if the user is an owner
-  const isOwner = global.owner.some(([jid]) => jid === user);
-  if (isOwner) throw `✳️ He's my owner, you idiot.`;
+  // Check if the user is Rolith
+  if (userNumber === '919737825303' || userName === 'Rolith') {
+    return conn.sendMessage(m.chat, { text: `He's my owner, you idiot.` });
+  }
 
   if (command === 'mute') {
     let duration = args[0];
